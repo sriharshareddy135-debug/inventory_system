@@ -187,7 +187,6 @@ uvicorn app.main:app --reload
 cd frontend
 npm install
 
-# Create .env.local
 echo "VITE_API_URL=http://localhost:8000" > .env.local
 
 npm run dev
