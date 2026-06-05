@@ -16,17 +16,14 @@ A production-ready full-stack application for managing products, customers, and 
 ## Quick Start (Docker Compose)
 
 ```bash
-# 1. Clone the repository
+
 git clone <your-repo-url>
 cd inventory-system
 
-# 2. Copy and configure environment variables
 cp .env.example .env
 
-# 3. Build and start all services
 docker compose up --build
 
-# 4. Open the app
 open http://localhost        # Frontend
 open http://localhost:8000/docs  # API docs (Swagger)
 ```
@@ -41,30 +38,30 @@ All three services (PostgreSQL, FastAPI backend, React frontend) start automatic
 inventory-system/
 ├── backend/
 │   ├── app/
-│   │   ├── main.py              # FastAPI app entry point
+│   │   ├── main.py             
 │   │   ├── database/
-│   │   │   └── connection.py    # SQLAlchemy engine & session
+│   │   │   └── connection.py    
 │   │   ├── models/
-│   │   │   └── models.py        # ORM models (Product, Customer, Order, OrderItem)
+│   │   │   └── models.py        
 │   │   ├── schemas/
-│   │   │   └── schemas.py       # Pydantic request/response schemas
+│   │   │   └── schemas.py      
 │   │   └── routers/
-│   │       ├── products.py      # /products CRUD
-│   │       ├── customers.py     # /customers CRUD
-│   │       ├── orders.py        # /orders with inventory deduction
-│   │       └── dashboard.py     # /dashboard aggregates
+│   │       ├── products.py     
+│   │       ├── customers.py     
+│   │       ├── orders.py        
+│   │       └── dashboard.py     
 │   ├── Dockerfile
 │   ├── .dockerignore
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
-│   │   ├── api/index.js         # Axios API client
-│   │   ├── components/          # Layout, Modal, StatCard, EmptyState
-│   │   ├── pages/               # Dashboard, Products, Customers, Orders
+│   │   ├── api/index.js         
+│   │   ├── components/          
+│   │   ├── pages/              
 │   │   ├── App.jsx
 │   │   └── main.jsx
-│   ├── Dockerfile               # Multi-stage: build → nginx
-│   ├── nginx.conf               # SPA routing support
+│   ├── Dockerfile               
+│   ├── nginx.conf               
 │   ├── .dockerignore
 │   └── package.json
 ├── docker-compose.yml
@@ -149,10 +146,9 @@ Interactive docs available at `http://localhost:8000/docs`
 ### Docker Hub (Backend Image)
 
 ```bash
-# Build and tag
+
 docker build -t <your-dockerhub-username>/stockr-backend:latest ./backend
 
-# Push
 docker push <your-dockerhub-username>/stockr-backend:latest
 ```
 
@@ -180,7 +176,6 @@ python -m venv venv
 source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
-# Set DATABASE_URL to a local postgres instance
 export DATABASE_URL=postgresql://postgres:password@localhost:5432/inventory_db
 
 uvicorn app.main:app --reload
