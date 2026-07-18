@@ -173,7 +173,7 @@ docker push <your-dockerhub-username>/stockr-backend:latest
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
+source venv/bin/activate   
 pip install -r requirements.txt
 
 export DATABASE_URL=postgresql://postgres:password@localhost:5432/inventory_db
