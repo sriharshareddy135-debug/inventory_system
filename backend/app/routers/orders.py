@@ -10,12 +10,11 @@ router = APIRouter()
 
 @router.post("", response_model=OrderResponse, status_code=status.HTTP_201_CREATED)
 def create_order(order_data: OrderCreate, db: Session = Depends(get_db)):
-    # Validate customer exists
+    
     customer = db.query(Customer).filter(Customer.id == order_data.customer_id).first()
     if not customer:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Customer not found")
 
-    # Validate items and check stock
     total_amount = 0.0
     items_to_create = []
 
@@ -35,16 +34,14 @@ def create_order(order_data: OrderCreate, db: Session = Depends(get_db)):
         total_amount += subtotal
         items_to_create.append((product, item.quantity, product.price))
 
-    # Create order
     db_order = Order(
         customer_id=order_data.customer_id,
         total_amount=round(total_amount, 2),
         status="pending"
     )
     db.add(db_order)
-    db.flush()  # Get order ID without committing
+    db.flush()  
 
-    # Create order items and reduce stock
     for product, quantity, unit_price in items_to_create:
         order_item = OrderItem(
             order_id=db_order.id,
@@ -53,12 +50,11 @@ def create_order(order_data: OrderCreate, db: Session = Depends(get_db)):
             unit_price=unit_price
         )
         db.add(order_item)
-        product.quantity -= quantity  # Reduce inventory
+        product.quantity -= quantity  
 
     db.commit()
     db.refresh(db_order)
 
-    # Return with relationships loaded
     return db.query(Order).options(
         joinedload(Order.customer),
         joinedload(Order.items).joinedload(OrderItem.product)
@@ -90,7 +86,6 @@ def delete_order(order_id: int, db: Session = Depends(get_db)):
     if not order:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
 
-    # Restore stock
     for item in order.items:
         product = db.query(Product).filter(Product.id == item.product_id).first()
         if product:
